@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<style>
+.siblings *
+{ 
+display: block;
+border: 2px solid lightgrey;
+color: lightgrey;
+padding: 5px;
+margin: 15px;
+}
+</style>
+<script src="tryjquery_traversing_prev_data/jquery.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("ul.start").prev().prev().prev().css({"color":"red","border":"2px solid red"});
+});
+</script>
+</head>
+<body>
+
+<div style="width:500px;" class="siblings">
+<div class="testing">jfkdsjflds</div>
+<div>never</div>
+<header>
+  <ul class="start">ul (parent)  
+    <li>li (sibling)</li>
+    <li>li (the previous sibling of li with class name "start")</li>
+    <li>li (sibling with class name "start")</li>
+    <li>li (sibling)</li>
+    <li>li (sibling)</li>
+  </ul> 
+</header>  
+</div>
+
+
+
+</body></html>
