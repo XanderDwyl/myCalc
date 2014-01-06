@@ -1,8 +1,7 @@
-// This flag will help us know if we need to clear the display div
-var reset_next = false;
+// This flag will help us know if we need to clear the display input
+var reset = false;
 
 $( 'button' ).click( function ( ) {
-    console.log( $( this ).html( ) );
 
     // What button was just clicked?
     var value = $( this ).html( );
@@ -10,27 +9,55 @@ $( 'button' ).click( function ( ) {
     // If they clicked equal, time to do the equation...
     if ( value == "=" ) {
 
-        // Evaluate everything in the display div, coming up with a total
-        var total = eval( $( '#display' ).html( ) );
+        // Evaluate everything in the display input, coming up with a total
+        var total = eval( $( '#display' ).val( ) );
 
-        // Inject the total back in the display div
-        $( '#display' ).html( total );
+        // Inject the total back in the display input
+        $( '#display' ).val( total );
 
-        // Set a flag, so the next time we know to reset the display div
-        reset_next = true;
+        // Set a flag, so the next time we know to reset the display input
+        reset = true;
     }
-    // Otherwise, they clicked a number or +/-
+    // Otherwise, they clicked a number or an operator ( + - * / )
     else {
-        // If the last time around we set this flag to be true, then we need to clear the display div
-        if ( reset_next ) {
-            $( '#display' ).html( value );
-            reset_next = false;
+        // If the last time around we set this flag to be true, then we need to clear the display input
+        if ( reset ) {
+			$( '#display' ).val( value );
+            reset = false;
         }
-        // Just append the number or +/- to the display div
+        // Just append the number or an operator ( + - * / ) to the display input
         else {
-            $( '#display' ).append( value );
+			var displayVal = $('#display').val() + value;
+			$( '#display' ).val( displayVal );
         }
-
     }
-
 } );
+var total;
+$( '#display' ).keypress(function (e) {
+	var value = $( this ).val();
+
+	if(e.charCode == 61) {
+
+		// Evaluate everything in the display input, coming up with a total
+        total = eval( $( '#display' ).val( ) );
+
+        // Inject the total back in the display input
+        $( '#display' ).val( total );
+
+        // Set a flag, so the next time we know to reset the display input
+        reset = true;
+	}
+	else {
+		if ( reset ) {
+			reset = false;
+		}
+	}
+
+}).keyup(function () {
+	if( reset ) {
+		$( '#display' ).val( total );
+	}
+});
+
+
+
