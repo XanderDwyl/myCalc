@@ -1,67 +1,57 @@
-// This flag will help us know if we need to clear the display input
-var reset = false;
-var total;
+(function() {
+	'use strict';
 
-$( 'button' ).click( function ( ) {
+	var button   = document.getElementsByTagName('button');
+	var answer   = 0;
+	var operator = '';
+	var point    = 0;
 
-    // What button was just clicked?
-    var value = $( this ).val( );
+	document.getElementById('display').value = 0;
 
-    switch (value){
-		case 'clear':
-			$( '#display' ).val( '' );
-			break;
-		case '=':
-			// Evaluate everything in the display input, coming up with a total
-			total = eval( $( '#display' ).val( ) );
+	var buttonClick = function () {
+		point = (document.getElementById('display').value).match(/\./g);
 
-			// Inject the total back in the display input
-			$( '#display' ).val( total );
-
-			// Set a flag, so the next time we know to reset the display input
-			reset = true;
-			break;
-		default:
-			// If the last time around we set this flag to be true, then we need to clear the display input
-			if ( reset ) {
-			$( '#display' ).val( value );
-			reset = false;
+		if( point !== null && this.value === '.' || this.value === 'clear' ) {
+			if( this.value === 'clear' ) {
+				document.getElementById('display').value  = 0;
+				operator = '';
+				document.getElementById('operator').value = operator;
 			}
-			// Just append the number or an operator ( + - * / ) to the display input
-			else {
-			var displayVal = $('#display').val() + value;
-			$( '#display' ).val( displayVal );
-			}
-			break;
-    }
-} );
-
-$( '#display' ).keypress(function (e) {
-	var value = $( this ).val();
-	console.log(e.charCode);
-
-	if(e.charCode == 61) {
-
-		// Evaluate everything in the display input, coming up with a total
-        total = eval( $( '#display' ).val( ) );
-
-        // Inject the total back in the display input
-        $( '#display' ).val( total );
-
-        // Set a flag, so the next time we know to reset the display input
-        reset = true;
-	}
-	else {
-		if ( reset ) {
-			reset = false;
+			return false;
 		}
+
+		if (document.getElementById('display').value === '0' && this.value !== '.') {
+			document.getElementById('display').value = '';
+		}
+
+		if (this.value === '+' ||
+			this.value === '-' ||
+			this.value === '/' ||
+			this.value === '*' ) {
+			operator = this.value;
+			document.getElementById('operator').innerHTML = operator;
+
+			if(document.getElementById('display').value > 0) {
+				answer = document.getElementById('display').value;
+			}
+
+			document.getElementById('display').value = 0;
+			console.log(answer);
+		} else {
+			if( this.value === '=' ) {
+				document.getElementById('display').value = eval ( answer + operator + document.getElementById('display').value );
+				answer = document.getElementById('display').value;
+				operator = this.value;
+				document.getElementById('operator').innerHTML = operator;
+			} else {
+				document.getElementById('display').value += this.value;
+			}
+		}
+
+	};
+
+	for( var inc = 0; inc < button.length; inc++) {
+		button[inc].addEventListener('click', buttonClick, false);
 	}
 
-}).keyup(function () {
-	if( reset ) {
-		$( '#display' ).val( total );
-	}
-});
-
-
-
+})(document.onLoad);
